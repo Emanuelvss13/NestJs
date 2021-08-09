@@ -2,6 +2,14 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
 
+<div  align="center">
+  
+  <h1 align="center" >Curso de NestJs feito pelo canal jorge aluizio</h1>
+  
+  <a href="https://www.youtube.com/watch?v=wTvnlgJb9hI&list=PLE0DHiXlN_qqRNX4KpkNKvFswCXHUwoyL">Link da playlist do curso</a>
+
+</div>
+
 [circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
 [circleci-url]: https://circleci.com/gh/nestjs/nest
 
