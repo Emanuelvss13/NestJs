@@ -1,3 +1,5 @@
+import { UpdateCourse } from './DTO/updateCourseDTO';
+import { CreateCourse } from './DTO/createCourseDTO';
 import { CoursesService } from './courses.service';
 import {
   Body,
@@ -37,15 +39,15 @@ export class CoursesController {
   }
 
   @Post()
-  Create(@Body() body) {
-    const course = this.coursesService.create(body);
+  Create(@Body() createCourseDto: CreateCourse) {
+    const course = this.coursesService.create(createCourseDto);
 
     return course;
   }
 
   @Patch(':id')
-  update(@Param('id') id, @Body() body) {
-    const course = this.coursesService.update(id, body);
+  update(@Param('id') id, @Body() updateCourseDto: UpdateCourse) {
+    const course = this.coursesService.update(id, updateCourseDto);
 
     return course;
   }
