@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpException,
   HttpStatus,
   Param,
   Patch,
@@ -16,29 +17,43 @@ import {
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  @Get('list')
-  findAll(@Res() response) {
-    return response.status(200).send('Lista de cursos');
+  @Get()
+  findAll() {
+    return this.coursesService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return `Curso #${id}`;
+    const course = this.coursesService.findOne(id);
+
+    if (course) {
+      return course;
+    } else {
+      throw new HttpException(
+        `Course ID ${id} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   @Post()
-  @HttpCode(HttpStatus.NO_CONTENT)
-  Create(@Body('name') body) {
-    return body;
+  Create(@Body() body) {
+    const course = this.coursesService.create(body);
+
+    return course;
   }
 
   @Patch(':id')
   update(@Param('id') id, @Body() body) {
-    return `O curso ${id} foi atualizado!`;
+    const course = this.coursesService.update(id, body);
+
+    return course;
   }
 
   @Delete(':id')
-  remove(@Param('id') id, @Body() body) {
-    return `O curso ${id} foi deletado!`;
+  remove(@Param('id') id) {
+    const course = this.coursesService.remove(id);
+
+    return course;
   }
 }
