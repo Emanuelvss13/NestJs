@@ -1,40 +1,55 @@
-import { Injectable } from '@nestjs/common';
+import { UpdateCourse } from './DTO/updateCourseDTO';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Course } from './entities/course.entity';
 
 @Injectable()
 export class CoursesService {
-  private courses: Course[] = [
-    {
-      id: 1,
-      name: 'Fundmento NestJS',
-      description: 'Fundmento NestJS',
-      tags: ['nodejs', 'nestjs', 'javascript'],
-    },
-  ];
+  constructor(
+    @InjectRepository(Course)
+    private readonly courseRepository: Repository<Course>,
+  ) {}
 
   findAll() {
-    return this.courses;
+    return this.courseRepository.find();
   }
 
   findOne(id: string) {
-    return this.courses.find((c) => c.id === Number(id));
+    const course = this.courseRepository.findOne(id);
+
+    if (course) {
+      return course;
+    } else {
+      throw new NotFoundException(`Course ID not found ${id}`);
+    }
   }
 
   create(createCourseDto: any) {
-    this.courses.push(createCourseDto);
+    const course = this.courseRepository.create(createCourseDto);
+    return this.courseRepository.save(course);
   }
 
-  update(id: string, updateCourseDto: any) {
-    const upCourse = this.courses.findIndex((c) => c.id === Number(id));
+  async update(id: string, updateCourseDto: any) {
+    const upCourse = await this.courseRepository.preload({
+      id: +id,
+      ...updateCourseDto,
+    });
 
-    this.courses[upCourse] = updateCourseDto;
+    if (upCourse) {
+      return this.courseRepository.save(upCourse);
+    } else {
+      throw new NotFoundException(`Course ID not found ${id}`);
+    }
   }
 
-  remove(id: string) {
-    const existCourse = this.courses.findIndex((c) => c.id === Number(id));
+  async remove(id: string) {
+    const course = await this.courseRepository.findOne(id);
 
-    if (existCourse) {
-      this.courses.splice(existCourse, 1);
+    if (course) {
+      return await this.courseRepository.remove(course);
+    } else {
+      throw new NotFoundException(`Course ID not found ${id}`);
     }
   }
 }
