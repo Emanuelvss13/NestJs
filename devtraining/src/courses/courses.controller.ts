@@ -6,13 +6,11 @@ import {
   Controller,
   Delete,
   Get,
-  HttpCode,
   HttpException,
   HttpStatus,
   Param,
   Patch,
   Post,
-  Res,
 } from '@nestjs/common';
 
 @Controller('courses')

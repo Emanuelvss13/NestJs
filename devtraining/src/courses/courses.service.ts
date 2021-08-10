@@ -30,7 +30,7 @@ export class CoursesService {
     return this.courseRepository.save(course);
   }
 
-  async update(id: string, updateCourseDto: any) {
+  async update(id: string, updateCourseDto: UpdateCourse) {
     const upCourse = await this.courseRepository.preload({
       id: +id,
       ...updateCourseDto,
